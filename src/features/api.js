@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-const url = "http://localhost:3000/employees";
+// export const api = axios.create({
+//     baseURL: `http://localhost:3000/employees` 
+// })
 
-export async function getEmployees(){
-    let result = [];
-
-    await axios
-    .get(url)
-    .then(response => {console.log(response); result = response.data});
-
-    return result;
-}
+// export async function getEmployees(){
+//     let results = [];
+//     setTimeout(
+//         await axios.get(baseUrl)
+//         .then(response => {results = {... response.data}}).finally(()=>{
+//             return results
+//     }), 5000);
+// }
