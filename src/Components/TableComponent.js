@@ -2,6 +2,10 @@ import React, { useState, Component } from "react";
 import { FiEdit2, FiTrash } from 'react-icons/fi'
 import axios from 'axios';
 import { FormRegister } from "./FormRegister";
+import { delelte } from "../features/delete"; 
+import {searchAll} from '../features/searchAll';
+import {searchOne} from '../features/searchOne';
+
 
 let funcionarios = [];
 let funcionarioSelecionado = null;
@@ -9,9 +13,9 @@ let buttonValue = 'Salvar';
 
 const url = `http://localhost:8081/employees/`; 
 
-const api = axios.create({
-    baseURL: `http://localhost:8081/employees/` 
-});
+// const api = axios.create({
+//     baseURL: `http://localhost:8081/employees/` 
+// });
 
 export class TableComponent extends Component {
 
@@ -25,7 +29,7 @@ export class TableComponent extends Component {
         }
 
         this.setState({funcionarioSelecionado: []})
-        api.get().then(res=>{
+        axios.get(url).then(res=>{
         funcionarios = {
             ...
             res.data,
@@ -37,40 +41,39 @@ export class TableComponent extends Component {
     componentWillMount(){
         this.setState({funcionarioSelecionado: null})
     }
-
-    // shouldComponentUpdate(){
-    //     this.state({})
-    // }
-
+    
     render(){
         let alterDb = (funcionario) => {
-            this.setState({buttonValue: 'Salvar'})
-            console.log('ta passando');
-            api.patch(`http://localhost:8081/employees/${funcionario.id}`, funcionario).then((respose)=>{
-                console.log(respose);
-            }).catch(err=>console.log(err));
+            this.setState({buttonValue: 'Salvar'});
         }
         let deleteItem = (id) => {
-            console.log(id);
-            axios.delete(`${url}/${id}`).then(val=>console.log(val)).catch(err=>console.log(err)).finally((stat)=>{
-                console.log(stat);
-                api.get().then(res=>{
-                    funcionarios = {
-                        ...
-                        res.data,
-                    }
-                    this.setState({funcionarios:[... res.data]})
-                }).catch(err=>console.log(err))
-                
-            })
+            let any = setTimeout(delelte(id), 1000);
+            if(any === 1){
+                // funcionarios = {
+                //                 ...
+                //                 res.data,
+                //             }
+                //             state.setState({funcionarios:[... res.data]})
+
+                let result = setTimeout(searchAll(), 1000);
+                console.log('resul')
+                console.log(result)
+                if (result != null){
+                    document.location.reload(true)
+                }
+
+            }
+
         }
         let searchItem = (employee) => {
-            this.setState({buttonValue: 'Editar', funcionarioSelecionado: employee});
-            axios.get(`${url}/${employee.id}`).then((response) => {
-                if(this.state.funcionarioSelecionado != response.data ){
-                    this.setState({funcionarioSelecionado:response.data});
-                }
-            }).catch(err=>console.log(err));
+            console.log(employee.id)
+            // this.setState({buttonValue: 'Editar', funcionarioSelecionado: employee});
+            let verify = null;
+            verify = setTimeout(searchOne(employee.id), 500);
+            if(verify!=null && (this.state.funcionarioSelecionado != verify )){
+                console.log(verify)
+                this.setState({buttonValue: 'Editar', funcionarioSelecionado:verify});
+            }   
         }
         return(
             <>

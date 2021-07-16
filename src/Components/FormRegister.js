@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { isValidElement, useState } from "react";
 import { FormInput } from "./FormComponents/FormInput";
+import { create } from '../features/create'
+import { alter } from '../features/alter'
 
 var initilValues = {
     id: '',
@@ -9,11 +11,6 @@ var initilValues = {
     salary: '',
     position: ''
 }   
-
-
-function createEmployee(employee){
-    axios.post(`http://localhost:8081/employees/`, employee).then(res=>console.log(res));
-}
 
 export let FormRegister = ({clickEvent, buttonValue, employee}) => {
 
@@ -28,14 +25,14 @@ export let FormRegister = ({clickEvent, buttonValue, employee}) => {
     let [values, setValues] = useState(initilValues); 
     let [fields, setValuesFields] = useState(isValidField);
 
-    console.log(fields)
+    // console.log(fields)
     
-    if(employee!= null && employee!=''){  
-        setValues(employee);
+    // if(employee!= null && employee!=''){  
+    //     setValues(employee);
 
-        employee = {};
+    //     employee = {};
 
-    }
+    // }
     if(buttonValue === ''){
         buttonValue = "Salvar"
     }
@@ -48,26 +45,30 @@ export let FormRegister = ({clickEvent, buttonValue, employee}) => {
         }) 
     }
 
-
-    let formEnvio = (employee) =>{
-        if(employee.name ===''){
-            setValuesFields({name: !fields.name});
-        }
-        if(employee.position ===''){
-            setValuesFields({position:!fields.position});
-        }
-        if(employee.salary ===''){
-            setValuesFields({salary:!fields.salary});
-        }
-        if(employee.bornDate ===''){
-            setValuesFields({bornDate:!fields.bornDate});
-        }
-
-        if(employee.name && employee.position && employee.salary && employee.bornDate){
-            createEmployee(employee);
-        }
-
+    let alterItem = (employee) => {
+        alter(employee);
     }
+
+
+    // let formEnvio = (employee) =>{
+    //     if(employee.name ===''){
+    //         setValuesFields({name: !fields.name});
+    //     }
+    //     if(employee.position ===''){
+    //         setValuesFields({position:!fields.position});
+    //     }
+    //     if(employee.salary ===''){
+    //         setValuesFields({salary:!fields.salary});
+    //     }
+    //     if(employee.bornDate ===''){
+    //         setValuesFields({bornDate:!fields.bornDate});
+    //     }
+
+    //     if(employee.name && employee.position && employee.salary && employee.bornDate){
+    //         createEmployee(employee);
+    //     }
+
+    // }
 
 
     return(
@@ -93,7 +94,7 @@ export let FormRegister = ({clickEvent, buttonValue, employee}) => {
                 </div>
 
                 <div className="form-group">
-                    <input onClick={()=>(buttonValue==='Salvar' ? formEnvio(values) : clickEvent)} type="submit" value={buttonValue} className={buttonValue !== 'Editar' ? "btn btn-primary btn-block" : "btn btn-success btn-block"}/>
+                    <input onClick={()=>(buttonValue==='Salvar' ? create(values) : alterItem(values))} type="submit" value={buttonValue} className={buttonValue !== 'Editar' ? "btn btn-primary btn-block" : "btn btn-success btn-block"}/>
                 </div>
             </form>
             
